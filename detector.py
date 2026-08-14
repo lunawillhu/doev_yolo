@@ -16,7 +16,8 @@ class Detector:
     def procesar_frame(self, frame):
         resultados = self.modelo(
             frame,
-            conf=self.umb_conf
+            conf=self.umb_conf,
+            verbose=False
         )
 
         return resultados

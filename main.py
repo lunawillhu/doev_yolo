@@ -17,7 +17,7 @@ while True:
 def buscar_camaras():
     camaras = []
     ncams = 0
-    for i in range(10):
+    for i in range(3):
         camara = cv2.VideoCapture(i)
 
         if camara.isOpened():
@@ -32,25 +32,27 @@ camaras, ncams = buscar_camaras()
 print("Camaras disponiblles:", ncams)
 
 if ncams>0:
-    for i in camaras:
+    for i, camara in enumerate(camaras):
         print(f"[{i}] Camara {i}")
 else:
     print("Conecte una cámara e intente nuevamente.")
     exit()
 
-cam = int(input("Ingrese el numero de la cámara que desea utilizar: "))
+opcion = int(input("Ingrese el numero de la cámara que desea utilizar: "))
+cam = camaras[opcion]
 
-# Menu de tiempo de repeticion del bucle
+# Tiempo de ejecucion
 
 duracion = float(input("Cuantos minutos debe durar el detector? "))
 tiempo = duracion*60
 
-# Solicitando umbral de confianza
+# Umbral de confianza
 umb_conf = float(input("Ingrese el umbral de confianza (0.0 - 1.0): "))
 
-# Funciones
+# Comienzo
 
 print("Sonría :)")
+print("Para salir presione 'q'")
 detector1 = Detector(modelo, cam, umb_conf)
 
 
