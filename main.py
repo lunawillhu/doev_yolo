@@ -1,6 +1,6 @@
 import cv2
 from ultralytics import YOLO
-import time
+from detector import Detector
 
 # Menu del modelo 
 while True:
@@ -13,10 +13,10 @@ while True:
         print("El modelo no es válido. Intente nuevamente.\n")
 
 # Menu de las camaras disponibes con una funcion
-ncams = 0
-def buscar_camaras(ncams):
-    camaras = []
 
+def buscar_camaras():
+    camaras = []
+    ncams = 0
     for i in range(10):
         camara = cv2.VideoCapture(i)
 
@@ -27,52 +27,42 @@ def buscar_camaras(ncams):
 
 
     return camaras, ncams
-camaras = buscar_camaras()
+camaras, ncams = buscar_camaras()
 
 print("Camaras disponiblles:", ncams)
 
 if ncams>0:
-    for i in range(camaras):
+    for i in camaras:
         print(f"[{i}] Camara {i}")
 else:
-    print("Conecte una camara e intente nuevamente.")
+    print("Conecte una cámara e intente nuevamente.")
     exit()
 
-cam = input("Ingrese el numero de la camara que desea utilizar: ")
-camara = cv2.VideoCapture(cam)
+cam = int(input("Ingrese el numero de la cámara que desea utilizar: "))
 
 # Menu de tiempo de repeticion del bucle
+
 duracion = float(input("Cuantos minutos debe durar el detector? "))
-duracion = duracion * 60
+tiempo = duracion*60
 
 # Solicitando umbral de confianza
-umb_conf = float(
-    input("Ingrese el umbral de confianza (0.0 - 1.0): ")
-)
+umb_conf = float(input("Ingrese el umbral de confianza (0.0 - 1.0): "))
 
-inicio = time.time()
+# Funciones
 
-
-# Inicio del bucle
-
-#while time.time() - inicio < duracion:
-
-#    frame = camara.read()
-
-#    resultados = model(frame)
-
-#    frame = resultados[0].plot()
-
-#    cv2.imshow("YOLO", frame)
+print("Sonría :)")
+detector1 = Detector(modelo, cam, umb_conf)
 
 
+resultados = detector1.ejecutar(tiempo)
 
+if resultados:
 
+    print("\nResultados:")
 
-detector = Detector(
-    modelo,
-    camara,
-    umb_conf
-)
+    for clase, confianza in resultados.items():
+        print(f"{clase}: {confianza:.2f}")
 
-########################################seguir################################################
+else:
+
+    print("\nNo se encontró ningún objeto.")

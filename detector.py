@@ -22,40 +22,40 @@ class Detector:
         return resultados
 
     def ejecutar(self, duracion):
-            camara = cv2.VideoCapture(self.fuente_video)
-            
-            inicio = time.time()
+        camara = cv2.VideoCapture(self.fuent_vid)
 
-            may_conf = {}
+        inicio = time.time()
 
-            while time.time() - inicio < duracion:
-                ret, frame = camara.read()
+        may_conf = {}
 
-                if not ret:
-                    break
+        while time.time() - inicio < duracion:
 
-                resultados = self.procesar_frame(frame)
+            ret, frame = camara.read()
 
-                frame = resultados[0].plot()
+            if not ret:
+                break
 
-                cv2.imshow("Detector", frame)
+            resultados = self.procesar_frame(frame)
 
-                for box in resultados[0].boxes:
+            for box in resultados[0].boxes:
 
-                    clase = resultados[0].names[int(box.cls)]
-                    confianza = float(box.conf)
+                clase = resultados[0].names[int(box.cls)]
+                confianza = float(box.conf)
 
-                    if clase not in may_conf:
-                        may_conf[clase] = confianza
+                if clase not in may_conf:
+                    may_conf[clase] = confianza
 
-                    elif confianza > may_conf[clase]:
-                        may_conf[clase] = confianza
+                elif confianza > may_conf[clase]:
+                    may_conf[clase] = confianza
 
-                    frame_mostrado = resultados[0].plot()
+            frame_mostrado = resultados[0].plot()
 
-                    cv2.imshow("Detector", frame_mostrado)
+            cv2.imshow("Detector", frame_mostrado)
 
-                    camara.release()
-                    cv2.destroyAllWindows()
+            if cv2.waitKey(1) & 0xFF == ord("q"):
+                break
 
-                    return may_conf
+        camara.release()
+        cv2.destroyAllWindows()
+
+        return may_conf
