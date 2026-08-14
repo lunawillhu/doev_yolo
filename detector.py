@@ -29,34 +29,38 @@ class Detector:
 
         may_conf = {}
 
-        while time.time() - inicio < duracion:
+        try:
 
-            ret, frame = camara.read()
+            while time.time() - inicio < duracion:
 
-            if not ret:
-                break
+                ret, frame = camara.read()
 
-            resultados = self.procesar_frame(frame)
+                if not ret:
+                    break
 
-            for box in resultados[0].boxes:
+                resultados = self.procesar_frame(frame)
 
-                clase = resultados[0].names[int(box.cls)]
-                confianza = float(box.conf)
+                for box in resultados[0].boxes:
 
-                if clase not in may_conf:
-                    may_conf[clase] = confianza
+                    clase = resultados[0].names[int(box.cls)]
+                    confianza = float(box.conf)
 
-                elif confianza > may_conf[clase]:
-                    may_conf[clase] = confianza
+                    if clase not in may_conf:
+                        may_conf[clase] = confianza
 
-            frame_mostrado = resultados[0].plot()
+                    elif confianza > may_conf[clase]:
+                        may_conf[clase] = confianza
 
-            cv2.imshow("Detector", frame_mostrado)
+                frame_mostrado = resultados[0].plot()
 
-            if cv2.waitKey(1) & 0xFF == ord("q"):
-                break
+                cv2.imshow("Detector", frame_mostrado)
 
-        camara.release()
-        cv2.destroyAllWindows()
+                if cv2.waitKey(1) & 0xFF == ord("q"):
+                    break
+
+        finally:
+
+            camara.release()
+            cv2.destroyAllWindows()
 
         return may_conf
