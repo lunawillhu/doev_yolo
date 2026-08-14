@@ -1,5 +1,6 @@
 import cv2
 from ultralytics import YOLO
+import time
 
 # Menu del modelo 
 while True:
@@ -38,7 +39,32 @@ else:
     exit()
 
 cam = input("Ingrese el numero de la camara que desea utilizar: ")
-
-# Fin del menu interactivo
 camara = cv2.VideoCapture(cam)
+
+# Menu de tiempo de repeticion del bucle
+duracion = float(input("Cuantos segundos debe durar el detector? "))
+
+inicio = time.time()
+while time.time() - inicio < duracion:
+
+    frame = camara.read()
+
+    resultados = model(frame)
+
+    frame = resultados[0].plot()
+
+    cv2.imshow("YOLO", frame)
+
+    if cv2.waitKey(1) & 0xFF == ord("q"):
+        break
+
+
+
+
+
+# Agregar la cantiadad de veces que el bucle debe funcionar.
+# Fin del menu interactivo
+
+detector(camara, modelo, bucle)
+
 ########################################seguir################################################
