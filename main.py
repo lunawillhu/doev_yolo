@@ -42,9 +42,11 @@ cam = input("Ingrese el numero de la camara que desea utilizar: ")
 camara = cv2.VideoCapture(cam)
 
 # Menu de tiempo de repeticion del bucle
-duracion = float(input("Cuantos segundos debe durar el detector? "))
+duracion = float(input("Cuantos minutos debe durar el detector? "))
+duracion = duracion * 60
 
 inicio = time.time()
+
 while time.time() - inicio < duracion:
 
     frame = camara.read()
@@ -54,9 +56,6 @@ while time.time() - inicio < duracion:
     frame = resultados[0].plot()
 
     cv2.imshow("YOLO", frame)
-
-    if cv2.waitKey(1) & 0xFF == ord("q"):
-        break
 
 
 
