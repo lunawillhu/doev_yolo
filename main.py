@@ -45,25 +45,34 @@ camara = cv2.VideoCapture(cam)
 duracion = float(input("Cuantos minutos debe durar el detector? "))
 duracion = duracion * 60
 
+# Solicitando umbral de confianza
+umb_conf = float(
+    input("Ingrese el umbral de confianza (0.0 - 1.0): ")
+)
+
 inicio = time.time()
 
-while time.time() - inicio < duracion:
 
-    frame = camara.read()
+# Inicio del bucle
 
-    resultados = model(frame)
+#while time.time() - inicio < duracion:
 
-    frame = resultados[0].plot()
+#    frame = camara.read()
 
-    cv2.imshow("YOLO", frame)
+#    resultados = model(frame)
+
+#    frame = resultados[0].plot()
+
+#    cv2.imshow("YOLO", frame)
 
 
 
 
 
-# Agregar la cantiadad de veces que el bucle debe funcionar.
-# Fin del menu interactivo
-
-detector(camara, modelo, bucle)
+detector = Detector(
+    modelo,
+    camara,
+    umb_conf
+)
 
 ########################################seguir################################################
